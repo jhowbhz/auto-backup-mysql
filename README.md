@@ -1,5 +1,5 @@
 # Auto Mysql Bunny
-Simple script in python, def auto backup your database mysql save in CDN bunny
+Simple script in python using mysqldump tools, define cron backup your database mysql save in CDN bunny
 
 ### Download scripts
 ```sh
