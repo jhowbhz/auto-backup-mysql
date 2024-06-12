@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backup Progress Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <h1 class="text-center mb-4">Backup Progress Dashboard</h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>Status: <span id="status">Aguardando</span></div>
+                    <div>Tabela Atual: <span id="current-table">-</span></div>
+                </div>
+                <canvas id="progress-chart"></canvas>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Total de Tabelas</h5>
+                        <p class="card-text" id="total-tables">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Tabelas Processadas</h5>
+                        <p class="card-text" id="processed-tables">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Tabelas Restantes</h5>
+                        <p class="card-text" id="remaining-tables">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Progresso do Upload do Arquivo</h5>
+                <p class="card-text" id="upload-progress">-</p>
+                <p id="upload-complete-message" style="display: none; color: green;">Upload concluído!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fetchProgress() {
+            fetch('http://localhost:5000/progress')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('status').innerText = data.status;
+                    document.getElementById('current-table').innerText = data.current_table;
+                    document.getElementById('total-tables').innerText = data.total_tables;
+                    document.getElementById('processed-tables').innerText = data.processed_tables;
+                    document.getElementById('remaining-tables').innerText = data.remaining_tables;
+                    document.getElementById('upload-progress').innerText = data.upload_progress + '%';
+                    updateChart(data.progress);
+                    
+                    // Exibir a mensagem de upload concluído quando o progresso for 100%
+                    if (data.upload_progress === 100) {
+                        document.getElementById('upload-complete-message').style.display = 'block';
+                    } else {
+                        document.getElementById('upload-complete-message').style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching progress:', error.message);
+                    // Exibir uma mensagem de erro para o usuário
+                    document.getElementById('status').innerText = 'Erro ao buscar o progresso';
+                });
+        }
+
+        // Variável global para armazenar a referência do gráfico
+        var myChart;
+
+        function updateChart(progress) {
+            if (myChart) {
+                myChart.destroy(); // Destruir o gráfico existente, se houver
+            }
+            var ctx = document.getElementById('progress-chart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Progresso'],
+                    datasets: [{
+                        label: 'Progresso',
+                        data: [progress],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+
+        setInterval(fetchProgress, 1000);
+    </script>
+</body>
+</html>

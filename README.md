@@ -1,4 +1,4 @@
-# Auto Mysql Bunny
+# Auto Mysql Bunny - Version beta
 Simple script in python using mysqldump tools, define cron backup your database mysql save in CDN bunny
 
 ### Download scripts
@@ -48,12 +48,32 @@ crontab -e
 0 3 * * * python3 /opt/scripts/bk.py
 ```
 
-### Run
+### Run backup script
 ```sh
-python /opt/scripts/bk.py
+python /opt/scripts/backup_script.py
+```
+
+### Dashboard events
+```sh
+http://localhost:5000/dashboard
+```
+
+### API events
+```sh
+http://localhost:5000/progress
 ```
 
 ### Configure Bunny CDN receive Backup FILES
 Get your FTP information
 
 https://bunny.net
+
+
+### Print screen
+
+Dashboard
+
+![alt text](image.png)
+
+API response
+![alt text](image-1.png)
