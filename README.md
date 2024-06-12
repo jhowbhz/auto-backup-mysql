@@ -3,7 +3,7 @@ Simple script in python using mysqldump tools, define cron backup your database 
 
 ### Download scripts
 ```sh
-git clone https://YOUR_KEY_GITHUB@github.com/APIBrasil/apigratis-scripts scripts
+git clone https://github.com/jhowbhz/auto-mysql-bunny.git scripts
 ```
 
 ### Install dependencies
