@@ -12,7 +12,7 @@ apt install python3 -y && apt install python3-pip -y
 ``` 
 ### Install project
 ```sh
-cd /opt/scripts/backup/ && pip3 install -r requirements.txt
+cd /opt/scripts/ && pip3 install -r requirements.txt
 ```
 
 ### Crontab
@@ -23,12 +23,12 @@ crontab -e
 
 ### Cron def 03:00 AM
 ```sh
-0 3 * * * python3 /opt/scripts/backup/bk.py
+0 3 * * * python3 /opt/scripts/bk.py
 ```
 
 ### Run
 ```sh
-python /opt/scripts/backup/bk.py
+python /opt/scripts/bk.py
 ```
 
 ### Configure Bunny CDN receive Backup FILES
