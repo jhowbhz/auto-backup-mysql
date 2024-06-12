@@ -12,7 +12,7 @@ apt install python3 -y && apt install python3-pip -y
 ``` 
 ### Install project
 ```sh
-cd /opt/scripts/ && pip3 install -r requirements.txt
+cd /opt/scripts/ && pip3 install -r requeriments.txt
 ```
 
 ### Crontab
